@@ -23,7 +23,56 @@ from paddlehub.text.bert_tokenizer import BertTokenizer
 from paddlehub.text.tokenizer import CustomTokenizer
 
 
-@download_data(url="https://bj.bcebos.com/paddlehub-dataset/msra_ner.tar.gz")
+#@download_data(url="https://bj.bcebos.com/paddlehub-dataset/msra_ner.tar.gz")
+import os  
+  
+# 假设你的本地数据集目录如下：  
+local_dataset_dir = '/path/to/your/local/dataset'  
+  
+# 确保数据集目录存在  
+if not os.path.exists(local_dataset_dir):  
+    raise ValueError(f"Local dataset directory not found: {local_dataset_dir}")  
+  
+# 假设你的数据集由txt和ann文件组成，并且文件名匹配  
+txt_files = [f for f in os.listdir(local_dataset_dir) if f.endswith('.txt')]  
+ann_files = [f for f in os.listdir(local_dataset_dir) if f.endswith('.ann')]  
+  
+# 检查txt和ann文件数量是否一致  
+if len(txt_files) != len(ann_files):  
+    raise ValueError("Number of txt files does not match number of ann files.")  
+  
+# 创建一个列表来存储样本  
+samples = []  
+  
+# 遍历所有txt和ann文件对  
+for txt_file, ann_file in zip(txt_files, ann_files):  
+    txt_path = os.path.join(local_dataset_dir, txt_file)  
+    ann_path = os.path.join(local_dataset_dir, ann_file)  
+      
+    # 读取txt和ann文件内容  
+    with open(txt_path, 'r', encoding='utf-8') as f_txt:  
+        txt_content = f_txt.read()  
+    with open(ann_path, 'r', encoding='utf-8') as f_ann:  
+        ann_content = f_ann.read()  
+      
+    # 这里添加你的文本预处理和标签解析代码  
+    # ...  
+      
+    # 假设你已经将文本和标签处理成了samples列表中的一个元素  
+    # samples.append(processed_sample)  
+      
+    # 示例：直接添加未经处理的样本（仅用于演示）  
+    samples.append({'text': txt_content, 'label': ann_content})  
+  
+# 创建自定义数据集类（如果需要的话）  
+# ...  
+  
+# 这里可以添加使用数据集的代码，比如创建一个DataLoader等  
+# ...  
+  
+# 打印一个样本示例  
+print(samples[0])
+
 class MSRA_NER(SeqLabelingDataset):
     """
     A set of manually annotated Chinese word-segmentation data and
